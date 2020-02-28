@@ -1,0 +1,40 @@
+---
+
+- name: Wait for updates / upgrades from user data script to release lock
+  script: wait-for-apt-on-startup.sh
+
+- name: mount volume
+  include_tasks: volumes.yml
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    upgrade: "yes" # Needs to be quoted
+    force_apt_get: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install required packages
+  apt:
+    name: "{{ packages }}"
+    force_apt_get: yes
+    state: latest
+    update_cache: yes
+  vars:
+    packages:
+      - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+      - gnupg-agent
+      - linux-aws
+      - awscli
+      - curl
+      - jq
+
+- name: "Create hard core limit file"
+  file:
+    path: /etc/security/limits.d/10.hardcore.conf
+    mode: '0644'
+    state: touch
+    owner: root
+    group: root

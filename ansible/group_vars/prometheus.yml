@@ -1,0 +1,130 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'localhost: 25'
+  smtp_from: 'prometheus'
+
+
+# templates:
+# - '/etc/alertmanager/templates/*.tmpl'
+# receivers:
+# - name: slack
+#   slack_configs:
+#   - api_url: https://hooks.slack.com/services/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
+#     channel: '#general'
+#     send_resolved: true
+
+route:
+  # group_by: ['alertname', 'cluster', 'service']
+  group_by: ['slack']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 30m
+  receiver: 'slack'
+  routes:
+    - match:
+        # severity: page
+        team: devops
+      # group_by: ['team']
+      # receiver: 'slack'
+      # routes:
+      #   - match:
+      #       team: devops
+      #     receiver: 'slack'
+
+  ### Send all notifications to me.
+  # receiver: email-me
+          
+receivers:
+- name: 'slack'
+  slack_configs:
+  - api_url: https://hooks.slack.com/services/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
+    channel: "#testchannel"
+    text: "Overview: {{ .CommonAnnotations.overview }}"
+# - name: 'slack'
+#   webhook_configs:
+#   - url: http://34.237.151.53:9165/alert
+#     send_resolved: true
+# - name: 'alertmananger-bot'
+#   webhook_configs:
+#   - url: http://0.0.0.0:8080
+#     send_resolved: true
+# - name: 'team-sms'
+#   webhook_configs:
+#     - url: 'http://localhost:9876/alert'
+
+
+
+
+
+# receivers:
+# - name: 'alertmananger-bot'
+#   webhook_configs:
+#   - send_resolved: true
+#     url: 'http://34.237.151.53:8080'
+# - name: 'telegramiconNode'
+#   webhook_configs:
+#   - url: http://34.237.151.53:9165/alert
+#     send_resolved: true
+    
+
+# - name: email-me
+#   email_configs:
+#   - to: $GMAIL_ACCOUNT
+#     from: $GMAIL_ACCOUNT
+#     smarthost: smtp.gmail.com:587
+#     auth_username: "$GMAIL_ACCOUNT"
+#     auth_identity: "$GMAIL_ACCOUNT"
+#     auth_password: "$GMAIL_AUTH_TOKEN"
+
+# inhibit_rules:
+#   - source_match:
+#       severity: 'page'
+#     target_match:
+#       severity: 'ticket'
+#     equal: ['team']
+
+
+
+
+
+
+
+
+
+
+  # group_by:
+  # - alertname
+  # - cluster
+  # - service
+  # group_interval: 5m
+  # group_wait: 30s
+  # receiver: slack
+  # repeat_interval: 3h
+
+
+
+# route:
+#   receiver: 'email_backup'
+#   group_by: ['alertname']
+#   group_wait: 10s
+#   group_interval: 1m
+#   routes:
+#     - match:
+#         severity: 'critical'
+#       group_by: ['team']
+#       receiver: 'email_pager'
+#       routes:
+#         - match:
+#             team: devops
+#             receiver: 'email_devops'
+
+#   receivers:
+#   - name: 'email_backup'
+#     email_configs:
+#       - to: 'dsvpham@gmail.com'
+#   - name: 'email_pager'
+#     email_configs:
+#       - to: 'dsvpham@gmail.com'
+#   - name: 'email_devops'
+#     email_configs:
+#       - to: 'dsvpham@gmail.com'

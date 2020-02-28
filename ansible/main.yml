@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - common
+    - { role: "dev-sec.os-hardening", when: (ansible_hardening | default(false) ) }
+    - { role: "dev-sec.ssh-hardening", when: (ansible_hardening | default(false) ) }
+    - cloudalchemy.prometheus
+    - cloudalchemy.grafana
+    - cloudalchemy.alertmanager

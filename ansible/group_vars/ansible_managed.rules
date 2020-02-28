@@ -1,0 +1,74 @@
+#
+# Ansible managed
+#
+
+groups:
+- name: ansible managed alert rules
+  rules:
+  - alert: Watchdog
+    annotations:
+      description: This is an alert meant to ensure that the entire alerting pipeline
+        is functional. This alert is always firing, therefore it should always be firing
+        in Alertmanager and always fire against a receiver. There are integrations with
+        various notification mechanisms that send a notification when this alert is
+        not firing. For example the "DeadMansSnitch" integration in PagerDuty.
+      summary: Ensure entire alerting pipeline is functional
+    expr: vector(1)
+    for: 10m
+    labels:
+      severity: page
+  - alert: InstanceDown
+    annotations:
+      description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for
+        more than 5 minutes.'
+      summary: Instance {{ $labels.instance }} down
+    expr: up == 0
+    for: 5m
+    labels:
+      severity: critical
+  - alert: CriticalCPULoad
+    annotations:
+      description: '{{ $labels.instance }} of job {{ $labels.job }} has Critical CPU
+        load for more than 2 minutes.'
+      summary: Instance {{ $labels.instance }} - Critical CPU load
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{job="node",mode="idle"}[5m]))
+      * 100) > 96
+    for: 2m
+    labels:
+      severity: critical
+  - alert: CriticalRAMUsage
+    annotations:
+      description: '{{ $labels.instance }} has Critical Memory Usage more than 5 minutes.'
+      summary: Instance {{ $labels.instance }} has Critical Memory Usage
+    expr: (1 - ((node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)
+      / node_memory_MemTotal_bytes)) * 100 > 60
+    for: 10s
+    labels:
+      severity: critical
+  - alert: CriticalDiskSpace
+    annotations:
+      description: '{{ $labels.instance }} of job {{ $labels.job }} has less than 10%
+        space remaining.'
+      summary: Instance {{ $labels.instance }} - Critical disk space usage
+    expr: node_filesystem_free_bytes{mountpoint!~"^/run(/.*|$)",fstype!~"(squashfs|fuse.*)",job="node"}
+      / node_filesystem_size_bytes{job="node"} < 0.1
+    for: 4m
+    labels:
+      severity: critical
+  - alert: RebootRequired
+    annotations:
+      description: '{{ $labels.instance }} requires a reboot.'
+      summary: Instance {{ $labels.instance }} - reboot required
+    expr: node_reboot_required > 0
+    labels:
+      severity: warning
+  - alert: ClockSkewDetected
+    annotations:
+      description: Clock skew detected on {{ $labels.instance }}. Ensure NTP is configured
+        correctly on this host.
+      summary: Instance {{ $labels.instance }} - Clock skew detected
+    expr: abs(node_timex_offset_seconds) * 1000 > 30
+    for: 2m
+    labels:
+      severity: warning
+  

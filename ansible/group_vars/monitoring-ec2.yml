@@ -1,0 +1,42 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - alertmanager-bot:
+      alertmanager_bot_telegram_admins:
+        - 1
+        - 2
+    # - ansible-node-exporter
+      
+  # - ebs-automatic-nvme-map ping
+  # - mount-volumes
+  #   - ansible-prometheus
+  #   prometheus_version: 2.15.2
+  #   - ansible-alertmanager
+  # vars:
+  #   alertmanager_receivers:
+  #     - name: slack
+  #       slack_configs:
+  #         - send_resolved: true
+  #           api_url: 'https://hooks.slack.com/services/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'
+  #           channel: '#general'
+  #   alertmanager_route:
+  #     group_by: ['alertname', 'cluster', 'service']
+  #     group_wait: 30s
+  #     group_interval: 5m
+  #     repeat_interval: 3h
+  #     receiver: slack
+
+  #   prometheus_alertmanager_config:
+  #     static_configs:
+  #       - targets:
+  #           - 'localhost'
+
+  #   alertmanager_route: [ receiver: 'email_backup' ]
+  #   alertmanager_receivers: [ name: 'email_backup', to: 'dsvpham@gmail.com' ]
+  #   alertmanager_route: [ receiver: 'default-receiver', group_wait: 5s, group_interval: 20s, repeat ]
+  #   alertmanager_receivers: [ send_resolved: true, to: dsvpham@gmail.com, from: dsvpham@gmail.com | default = global.smtp_from ]
+  # - role: ansible-grafana 
+  #   grafana_security: { admin_user: admin, admin_password: "admin" }
+  # - alertmanager-bot
+
