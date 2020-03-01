@@ -1,8 +1,10 @@
 # terraform-aws-ec2-prometheus
 
+<p class="callout warning">WIP</p>
+
 ## Features
 
-This module...
+This provisions an ec2 and then configures it with prometheus, alertmanager, and grafana.
 
 ## Terraform Versions
 
