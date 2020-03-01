@@ -1,6 +1,12 @@
 ########
 # Label
 ########
+variable "name" {
+  description = "The name for the label"
+  type        = string
+  default     = "prometheus"
+}
+
 variable "environment" {
   description = "The environment"
   type        = string
@@ -10,19 +16,19 @@ variable "environment" {
 variable "namespace" {
   description = "The namespace to deploy into"
   type        = string
-  default     = ""
+  default     = "prod"
 }
 
 variable "stage" {
   description = "The stage of the deployment"
   type        = string
-  default     = ""
+  default     = "blue"
 }
 
 variable "network_name" {
   description = "The network name, ie kusama / mainnet"
   type        = string
-  default     = ""
+  default     = "main"
 }
 
 variable "owner" {
@@ -80,7 +86,7 @@ variable "monitoring" {
 variable "root_volume_size" {
   description = "Root volume size"
   type        = string
-  default     = 0
+  default     = 8
 }
 
 variable "instance_type" {
@@ -117,7 +123,7 @@ variable "ebs_volume_size" {
 variable "volume_path" {
   description = "The path of the EBS volume"
   type        = string
-  default     = "/dev/sdf"
+  default     = "/dev/xvdf"
 }
 
 

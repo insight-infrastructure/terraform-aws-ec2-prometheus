@@ -22,7 +22,11 @@ resource "aws_security_group" "this" {
     for_each = [
       22,
       80,
-    443]
+      443,
+      3000,
+      9090,
+      9093,
+    9094]
     content {
       from_port = ingress.value
       to_port   = ingress.value
@@ -44,8 +48,11 @@ resource "aws_security_group" "this" {
 module "defaults" {
   source    = "../.."
   subnet_id = module.vpc.public_subnets[0]
+
   vpc_security_group_ids = [
   aws_security_group.this.id]
+
+  ebs_volume_size  = 20
   public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
 }

@@ -3,9 +3,6 @@
 - name: Wait for updates / upgrades from user data script to release lock
   script: wait-for-apt-on-startup.sh
 
-- name: mount volume
-  include_tasks: volumes.yml
-
 - name: Update and upgrade apt packages
   become: true
   apt:
@@ -30,6 +27,12 @@
       - awscli
       - curl
       - jq
+
+- name: "get facts"
+  ec2_metadata_facts: {}
+
+- name: mount volumes
+  include_tasks: volumes.yml
 
 - name: "Create hard core limit file"
   file:

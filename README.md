@@ -42,15 +42,16 @@ No issue is creating limit on this module.
 | instance\_type | Instance type | `string` | `"t2.micro"` | no |
 | key\_name | The key pair to import | `string` | `""` | no |
 | monitoring | Boolean for cloudwatch | `bool` | `false` | no |
-| namespace | The namespace to deploy into | `string` | `""` | no |
-| network\_name | The network name, ie kusama / mainnet | `string` | `""` | no |
+| name | The name for the label | `string` | `"prometheus"` | no |
+| namespace | The namespace to deploy into | `string` | `"prod"` | no |
+| network\_name | The network name, ie kusama / mainnet | `string` | `"main"` | no |
 | owner | Owner of the infrastructure | `string` | `""` | no |
 | private\_key\_path | The path to the private ssh key | `string` | n/a | yes |
 | public\_key\_path | The path to the public ssh key | `string` | n/a | yes |
-| root\_volume\_size | Root volume size | `string` | `0` | no |
-| stage | The stage of the deployment | `string` | `""` | no |
+| root\_volume\_size | Root volume size | `string` | `8` | no |
+| stage | The stage of the deployment | `string` | `"blue"` | no |
 | subnet\_id | The id of the subnet | `string` | n/a | yes |
-| volume\_path | The path of the EBS volume | `string` | `"/dev/sdf"` | no |
+| volume\_path | The path of the EBS volume | `string` | `"/dev/xvdf"` | no |
 | vpc\_security\_group\_ids | List of security groups | `list(string)` | n/a | yes |
 
 ## Outputs

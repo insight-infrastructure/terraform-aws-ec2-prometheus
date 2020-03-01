@@ -8,3 +8,58 @@
     - cloudalchemy.prometheus
     - cloudalchemy.grafana
     - cloudalchemy.alertmanager
+#  tasks:
+#    - debug:
+#        msg: "{{ grafana_dashboards }}"
+
+  vars:
+
+# grafana
+    grafana_security:
+      admin_user: admin
+      admin_password: "testing"
+#    grafana_datasources:
+#      - name: prometheus
+#        type: prometheus
+#        access: proxy
+#        url: "http://localhost:9090"
+#        basicAuth: false
+#
+#    grafana_dashboards:
+#      - dashboard_id: 111
+#        revision_id: 1
+#        datasource: prometheus
+#      - path: "{{ playbook_dir }}/templates/"
+
+# alertmanager
+    alertmanager_config_file: "{{ playbook_dir }}/templates/alertmanager.yml.j2"
+
+    alertmanager_receivers:
+      - name: 'slack'
+        slack_configs:
+         - api_url: "https://hooks.slack.com/services/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"
+           channel: "#testchannel"
+           text: thing
+##           text: "Overview: {{ .CommonAnnotations.overview }}"
+#           text: "Overview: {{ .CommonAnnotations.description }}"
+
+    alertmanager_route:
+      group_by: ['slack']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 30m
+      receiver: 'slack'
+
+#      routes:
+#        - match:
+#            team: devops
+
+    alertmanager_resolve_timeout: 5m
+    alertmanager_smtp:
+      from: 'prometheus'
+      smarthost: 'localhost:25'
+#     auth_username: ''
+#     auth_password: ''
+#     auth_secret: ''
+#     auth_identity: ''
+#     require_tls: "True"

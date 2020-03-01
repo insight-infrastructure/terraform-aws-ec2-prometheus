@@ -1,9 +1,6 @@
 ---
 # https://github.com/pshemk/ec2-base/blob/master/roles/ec2-base/tasks/volume.yaml
 
-- name: "get facts"
-  ec2_metadata_facts: {}
-
 - name: "initialise tags for {{ volume.Attachments[0].Device }}"
   set_fact:
     volume_tags: {}
@@ -14,6 +11,7 @@
   loop: "{{ volume.Tags }}"
   loop_control:
     label: "{{ item.Key }}"
+  when: volume.Tags is defined
 
 - name: "create mount path {{ volume.Attachments[0].Device }}"
   file:
@@ -60,4 +58,3 @@
     fstype: "{{ volume_tags['Fs_type']| default('xfs') }}"
     state: "mounted"
   when: supervisor == "legacy"
-
