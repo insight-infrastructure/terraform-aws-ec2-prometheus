@@ -1,6 +1,7 @@
 .idea
 
 # Terraform and terragrunt
+*.tfstate
 *.tfstate/
 *.tfstate.backup
 *.tfplan
