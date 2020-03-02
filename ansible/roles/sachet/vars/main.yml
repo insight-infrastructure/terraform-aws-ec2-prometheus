@@ -1,0 +1,18 @@
+---
+# defaults file for sachet-role
+
+sachet_install_path: /opt
+
+sachet_group: sachet
+
+sachet_user: sachet
+
+sachet_download_url: "https://github.com/messagebird/sachet/releases/download/0.2.0/sachet-0.2.0.linux-amd64.tar.gz"
+
+sachet_dest_package_name: "sachet-0.2.0.linux-amd64"
+
+sachet_bin_path: /usr/local/bin/
+
+sachet_path: /etc/sachet
+
+telegram_token: "724679217:aa26V5mK3e2qkGsSlTT-iHreaa5FUyy3Z_0"

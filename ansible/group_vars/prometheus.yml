@@ -83,15 +83,6 @@ receivers:
 #       severity: 'ticket'
 #     equal: ['team']
 
-
-
-
-
-
-
-
-
-
   # group_by:
   # - alertname
   # - cluster

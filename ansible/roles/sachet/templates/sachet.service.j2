@@ -1,0 +1,17 @@
+[Unit]
+Description=Sachet - Prometheus Integration for telegram
+After=network.target
+
+[Service]
+User={{ sachet_user }}
+Group={{ sachet_group }}
+Type=simple
+ExecStart=/usr/local/bin/sachet -config /etc/sachet/sachet.yml
+Restart=Always
+StartLimitBurst=0
+RestartSec=600
+
+[Install]
+WantedBy=multi-user.target
+After=network-online.target
+Wants=network-online.target

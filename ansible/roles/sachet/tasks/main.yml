@@ -1,0 +1,10 @@
+---
+# tasks file for sachet-role
+- include: install-sachet.yml
+- include: configure-sachet.yml
+
+- name: Start and Enable the sachet service
+  service:
+    name: sachet
+    state: started
+    enabled: true

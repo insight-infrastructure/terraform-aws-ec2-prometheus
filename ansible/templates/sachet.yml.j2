@@ -1,0 +1,16 @@
+---
+providers:
+telegram:
+  token: "{{ telegram_token }}" #Generate and change the token for telegram
+ 
+templates:
+- /etc/sachet/notifications.tmpl
+
+{% raw %}
+receivers:
+  - name: 'team-chat'
+    provider: 'telegram'
+    to:
+      - '164451814' # the chat id of a user. Get yours at https://telegram.me/userinfobot
+    text: '{{ template "telegram_message" . }}'
+{% endraw %}

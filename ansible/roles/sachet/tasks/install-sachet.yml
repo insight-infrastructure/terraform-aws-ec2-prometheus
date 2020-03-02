@@ -1,0 +1,40 @@
+---
+- name: Create the Sachet group
+  group:
+    name: "{{ sachet_group }}"
+    state: present
+
+- name: Create Sachet user
+  user:
+    name: "{{ sachet_user }}"
+    group: "{{ sachet_group }}"
+    state: present
+
+- name: Downloading sachet
+  get_url:
+    url: "{{ sachet_download_url }}"
+    dest: "{{ sachet_install_path }}"
+
+- name: Unarchive sachet
+  unarchive:
+    src: "{{ sachet_install_path }}/{{ sachet_dest_package_name }}.tar.gz"
+    dest: "{{ sachet_install_path }}"
+    remote_src: True
+    owner: "{{ sachet_user }}"
+    group: "{{ sachet_group }}"
+    creates: "{{ sachet_install_path }}/sachet"
+
+
+- name: Symlink the sachet binaries
+  copy:
+    src: "{{ sachet_install_path }}/{{ sachet_dest_package_name }}/sachet"
+    dest: /usr/local/bin/
+    mode: 0555
+    remote_src: yes
+
+- name: Creating a sachet  folder in /etc/ directory
+  file:
+    path: "{{ sachet_path }}"
+    state: directory
+    owner: "{{ sachet_user }}"
+    group: "{{ sachet_group }}"

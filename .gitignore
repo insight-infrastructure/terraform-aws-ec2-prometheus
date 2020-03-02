@@ -7,6 +7,7 @@
 *.tfplan
 .terragrunt-cache/
 .terraform/
+.terraform.tfstate.lock.info
 
 test/fixtures/keys/*
 !test/fixtures/keys/.gitkeep

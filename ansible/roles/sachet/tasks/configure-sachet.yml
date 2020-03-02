@@ -1,0 +1,23 @@
+- name: Create the Sachet configuration file
+  template:
+    src: sachet.yml.j2
+    dest: /etc/sachet/sachet.yml
+    owner: "{{ sachet_user }}"
+    group: "{{ sachet_group }}"
+    mode: 0755
+
+- name: Create the Sachet template file
+  copy:
+    src: notifications.tmpl
+    dest: /etc/sachet/notifications.tmpl
+    owner: "{{ sachet_user }}"
+    group: "{{ sachet_group }}"
+    mode: 0755
+
+- name: Configure service file
+  template:
+    src: sachet.service.j2
+    dest: /etc/systemd/system/sachet.service
+    owner: "{{ sachet_user }}"
+    group: "{{ sachet_group }}"
+    mode: '0755'

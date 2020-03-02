@@ -2,12 +2,13 @@
 - hosts: all
   become: true
   roles:
-    - common
-    - { role: "dev-sec.os-hardening", when: (ansible_hardening | default(false) ) }
-    - { role: "dev-sec.ssh-hardening", when: (ansible_hardening | default(false) ) }
-    - cloudalchemy.prometheus
-    - cloudalchemy.grafana
-    - cloudalchemy.alertmanager
+#    - common
+#    - { role: "dev-sec.os-hardening", when: (ansible_hardening | default(false) ) }
+#    - { role: "dev-sec.ssh-hardening", when: (ansible_hardening | default(false) ) }
+#    - cloudalchemy.prometheus
+#    - cloudalchemy.grafana
+#    - cloudalchemy.alertmanager
+    - sachet
 #  tasks:
 #    - debug:
 #        msg: "{{ grafana_dashboards }}"
@@ -24,7 +25,7 @@
 #        access: proxy
 #        url: "http://localhost:9090"
 #        basicAuth: false
-#
+
 #    grafana_dashboards:
 #      - dashboard_id: 111
 #        revision_id: 1
@@ -40,7 +41,7 @@
          - api_url: "https://hooks.slack.com/services/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"
            channel: "#testchannel"
            text: thing
-##           text: "Overview: {{ .CommonAnnotations.overview }}"
+#           text: "Overview: {{ .CommonAnnotations.overview }}"
 #           text: "Overview: {{ .CommonAnnotations.description }}"
 
     alertmanager_route:
