@@ -1,9 +1,5 @@
 resource "random_pet" "this" {}
 
-//locals {
-//  name =
-//}
-
 module "label" {
   source = "github.com/robc-io/terraform-null-label.git?ref=0.16.1"
 
@@ -74,74 +70,6 @@ resource "aws_s3_bucket" "logs" {
   tags   = module.label.tags
 }
 
-resource "aws_iam_role" "this" {
-  name               = "${module.label.name}Role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-
-  tags = module.label.tags
-}
-
-resource "aws_iam_instance_profile" "this" {
-  name = "${module.label.name}InstanceProfile"
-  role = aws_iam_role.this.name
-}
-
-resource "aws_iam_policy" "json_policy" {
-  name   = "${module.label.name}Policy"
-  policy = <<-EOT
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "EbsVolumeAttach",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:AttachVolume"
-            ],
-            "Resource": "[${aws_ebs_volume.this.*.arn[0]},${aws_instance.this.*.arn[0]}]"
-        },
-        {
-            "Sid": "EbsVolumeDescribe",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeVolumeStatus",
-                "ec2:DescribeVolumes",
-                "ec2:DescribeVolumeAttribute",
-                "ec2:DescribeInstances"
-            ],
-            "Resource": "*"
-        },
-        {
-          "Sid":"ReadWrite",
-          "Effect":"Allow",
-          "Action":["s3:GetObject", "s3:PutObject"],
-          "Resource":["arn:aws:s3:::${aws_s3_bucket.logs.bucket}/*"]
-        }
-    ]
-}
-
-EOT
-}
-
-resource "aws_iam_role_policy_attachment" "json_policy" {
-  role = aws_iam_role.this.id
-
-  policy_arn = aws_iam_policy.json_policy.arn
-}
 
 resource "aws_instance" "this" {
   ami           = module.ami.ubuntu_1804_ami_id
@@ -160,6 +88,18 @@ resource "aws_instance" "this" {
   tags = module.label.tags
 }
 
+
+variable "grafana_admin_user" {
+  description = "The grafana admin user name"
+  type        = string
+  default     = "admin"
+}
+variable "grafana_admin_password" {
+  description = "The grafana admin password"
+  type        = string
+  default     = "hunter2"
+}
+
 module "ansible" {
   source           = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=master"
   ip               = aws_eip_association.this.public_ip
@@ -167,7 +107,10 @@ module "ansible" {
   private_key_path = var.private_key_path
 
   playbook_file_path = "${path.module}/ansible/main.yml"
-  playbook_vars      = {}
+  playbook_vars = merge(var.playbook_vars, {
+    "grafana_security.admin_user" : var.grafana_admin_user
+    "grafana_security.admin_password" : var.grafana_admin_password
+  })
 
   requirements_file_path = "${path.module}/ansible/requirements.yml"
 }

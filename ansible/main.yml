@@ -2,23 +2,24 @@
 - hosts: all
   become: true
   roles:
-#    - common
-#    - { role: "dev-sec.os-hardening", when: (ansible_hardening | default(false) ) }
-#    - { role: "dev-sec.ssh-hardening", when: (ansible_hardening | default(false) ) }
-#    - cloudalchemy.prometheus
-#    - cloudalchemy.grafana
-#    - cloudalchemy.alertmanager
-    - sachet
+    - common
+    - icon-monitoring-configs
+    - { role: "dev-sec.os-hardening", when: (ansible_hardening | default(false)) }
+    - { role: "dev-sec.ssh-hardening", when: (ansible_hardening | default(false)) }
+    - { role: "cloudalchemy.prometheus", when: (prometheus_enabled | default(true))}
+    - { role: "cloudalchemy.grafana",  when: (grafana_enabled | default(true))}
+    - { role: "cloudalchemy.alertmanager",  when: (alertmanager_enabled | default(false))}
+    - { role: sachet }
+
 #  tasks:
 #    - debug:
 #        msg: "{{ grafana_dashboards }}"
 
   vars:
 
-# grafana
-    grafana_security:
-      admin_user: admin
-      admin_password: "testing"
+# File: /etc/grafana...
+# API:
+#
 #    grafana_datasources:
 #      - name: prometheus
 #        type: prometheus
@@ -35,6 +36,7 @@
 # alertmanager
     alertmanager_config_file: "{{ playbook_dir }}/templates/alertmanager.yml.j2"
 
+# API: /alerts
     alertmanager_receivers:
       - name: 'slack'
         slack_configs:

@@ -1,0 +1,18 @@
+---
+# tasks file for configs
+
+- name: alertmanager config
+  template:
+    src: alertmanager.yml.j2
+    dest: /etc/alertmaneger.yml
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
+- name: notifications config
+  template:
+    src: notifications.yml.j2
+    dest: /etc/notifications.yml
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'

@@ -1,0 +1,73 @@
+groups:
+  - name: uptime    # track uptime
+    rules:
+      - record: job:uptime:average:ft
+        expr:  avg without (instance) (up{job="validator"})
+      - alert: ValidatorApplicationDown
+        expr: job:uptime:average:ft < .75
+        for: 5m    # Hold alert in pending state. Will only fire when endpoints have been down for 5 minutes
+        labels:
+          severity: page
+          team: devops
+        annotations:
+          overview: '{{printf "%.2f" $value}}% instances are up for {{ $labels.job }}'
+  - name: downtime
+    rules:
+      - record: job:uptime:average:ft
+        expr: avg without (instance) (up{job="validator"})
+      - alert: ValidatorApplicationDown
+        expr: job:uptime:average:ft < .75
+        for: 30s
+        labels:
+          severity: page
+        annotations:
+          overview: '{{printf "%.2f" $value}}% instances are down for {{ $labels.job }}'
+  # - name: PrometheusAlerts
+  #   rules:
+  #   - alert: PrometheusConfigurationReload
+  #     expr: prometheus_config_last_reload_successful != 1
+  #     for: 5m
+  #     labels:
+  #       severity: error
+  #     annotations:
+  #       summary: "Prometheus configuration reload (instance {{ $labels.instance }})"
+  #       description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  #   - alert: PrometheusNotConnectedToAlertmanager
+  #     expr: prometheus_notifications_alertmanagers_discovered < 1
+  #     for: 5m
+  #     labels:
+  #       severity: error
+  #     annotations:
+  #       summary: "Prometheus not connected to alertmanager (instance {{ $labels.instance }})"
+  #       description: "Prometheus cannot connect the alertmanager\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  #   - alert: AlertmanagerConfigurationReload
+  #     expr: alertmanager_config_last_reload_successful != 1
+  #     for: 5m
+  #     labels:
+  #       severity: error
+  #     annotations:
+  #       summary: "AlertManager configuration reload (instance {{ $labels.instance }})"
+  #       description: "AlertManager configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  #   - alert: ExporterDown
+  #     expr: up == 0
+  #     for: 5m
+  #     labels:
+  #       severity: warning
+  #     annotations:
+  #       summary: "Exporter down (instance {{ $labels.instance }})"
+  #       description: "Prometheus exporter down\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+  # # - name: NodeDown
+  # #   rules:
+  # #   - alert: NodeisDown
+  # #     expr: up == 0
+  # #     for: 1m
+  # #     labels:
+  # #       severity: page
+  # #     annotations:
+  # #       description: '{{ $labels.instance }} of job {{ labels.job }} have been down for 1 minute'
+  # #       summary: 'Instance {{ $labels.instance }} down.'
+
+          
+
+  

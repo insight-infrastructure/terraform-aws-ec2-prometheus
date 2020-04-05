@@ -130,6 +130,13 @@ variable "volume_path" {
 #########
 # Ansible
 #########
+variable "playbook_vars" {
+  description = "Extra playbook vars"
+  type        = map(string)
+  default     = {}
+}
+
+
 //variable "private_key_path" {
 //  description = "Path to the private ssh key"
 //  type        = string

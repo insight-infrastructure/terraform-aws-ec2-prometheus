@@ -1,5 +1,3 @@
-
-{% raw %}
 global:
   resolve_timeout: 5m
   smtp_smarthost: 'localhost: 25'
@@ -41,8 +39,7 @@ receivers:
   slack_configs:
   - api_url: https://hooks.slack.com/services/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
     channel: "#testchannel"
-#    text: "Overview: {{ .CommonAnnotations.overview }}"
-    text: testing
+    text: "Overview: {{ .CommonAnnotations.overview }}"
 # - name: 'slack'
 #   webhook_configs:
 #   - url: http://34.237.151.53:9165/alert
@@ -86,15 +83,6 @@ receivers:
 #       severity: 'ticket'
 #     equal: ['team']
 
-
-
-
-
-
-
-
-
-
   # group_by:
   # - alertname
   # - cluster
@@ -131,6 +119,3 @@ receivers:
 #   - name: 'email_devops'
 #     email_configs:
 #       - to: 'dsvpham@gmail.com'
-
-
-{% endraw %}
