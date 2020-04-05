@@ -35,14 +35,21 @@ resource "aws_security_group" "this" {
 }
 
 locals {
-  keystore_path = "${path.cwd}/../../test/fixtures/keystore-icon"
+  keystore_path = var.keystore_path == "" ? "${path.cwd}/../../test/fixtures/keystore-icon" : var.keystore_path
+}
+
+variable "keystore_path" {
+  default = ""
+}
+variable "organization_name" {
+  default = "Insight-CI1"
 }
 
 module "registration" {
   source       = "github.com/insight-icon/terraform-aws-icon-registration.git?ref=v0.1.0"
   network_name = "testnet"
 
-  organization_name    = "Insight-CI1"
+  organization_name    = var.organization_name
   organization_country = "USA"
   organization_email   = "fake@gmail.com"
   organization_city    = "CircleCI"
