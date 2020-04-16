@@ -41,6 +41,7 @@ locals {
 variable "keystore_path" {
   default = ""
 }
+
 variable "organization_name" {
   default = "Insight-CI1"
 }

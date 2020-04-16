@@ -92,7 +92,7 @@ variable "root_volume_size" {
 variable "instance_type" {
   description = "Instance type"
   type        = string
-  default     = "t2.micro"
+  default     = "t2.small"
 }
 
 variable "public_key_path" {
@@ -136,6 +136,18 @@ variable "playbook_vars" {
   default     = {}
 }
 
+variable "playbook_vars_file" {
+  description = "Path to vars file"
+  type        = string
+  default     = ""
+}
+
+variable "alertmanager_receivers" {
+  description = "list of recievers per docs https://prometheus.io/docs/alerting/configuration/#example"
+  type        = list(map(string))
+  default     = [{}]
+}
+
 
 //variable "private_key_path" {
 //  description = "Path to the private ssh key"
@@ -156,4 +168,16 @@ variable "playbook_vars" {
 //}
 
 
+
+variable "root_domain_name" {
+  description = "The name of the root domain name"
+  type        = string
+  default     = ""
+}
+
+variable "hostname" {
+  description = "Boolean to create a hostname - ie hostname.example.com"
+  type        = string
+  default     = ""
+}
 

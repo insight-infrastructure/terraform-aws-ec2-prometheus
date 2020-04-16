@@ -22,11 +22,7 @@ module "ami" {
 }
 
 resource "aws_eip" "this" {
-  tags = merge({
-    Name = "wazuh-server"
-  }, module.label.tags)
-  depends_on = [
-  aws_instance.this]
+  tags = module.label.tags
 }
 
 resource "aws_eip_association" "this" {
@@ -37,6 +33,8 @@ resource "aws_eip_association" "this" {
 resource "aws_key_pair" "this" {
   count      = var.public_key_path == "" ? 0 : 1
   public_key = file(var.public_key_path)
+
+  tags = module.label.tags
 }
 
 resource "aws_ebs_volume" "this" {
@@ -64,7 +62,6 @@ resource "aws_volume_attachment" "this" {
 data "aws_caller_identity" "this" {}
 
 resource "aws_s3_bucket" "logs" {
-  //  bucket = "${module.label.name}-logs-${data.aws_caller_identity.this.account_id}"
   bucket = "logs-${data.aws_caller_identity.this.account_id}"
   acl    = "private"
   tags   = module.label.tags
@@ -88,18 +85,6 @@ resource "aws_instance" "this" {
   tags = module.label.tags
 }
 
-
-variable "grafana_admin_user" {
-  description = "The grafana admin user name"
-  type        = string
-  default     = "admin"
-}
-variable "grafana_admin_password" {
-  description = "The grafana admin password"
-  type        = string
-  default     = "hunter2"
-}
-
 module "ansible" {
   source           = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=master"
   ip               = aws_eip_association.this.public_ip
@@ -107,10 +92,30 @@ module "ansible" {
   private_key_path = var.private_key_path
 
   playbook_file_path = "${path.module}/ansible/main.yml"
-  playbook_vars = merge(var.playbook_vars, {
-    "grafana_security.admin_user" : var.grafana_admin_user
-    "grafana_security.admin_password" : var.grafana_admin_password
-  })
+
+  playbook_vars = {
+    ansible_host = var.root_domain_name == "" ? aws_eip.this.public_ip : join("", aws_route53_record.this.*.fqdn)
+  }
+
+  playbook_vars_file = var.playbook_vars_file
 
   requirements_file_path = "${path.module}/ansible/requirements.yml"
 }
+
+data "aws_route53_zone" "this" {
+  count = var.root_domain_name == "" ? 0 : 1
+  name  = "${var.root_domain_name}."
+}
+
+resource "aws_route53_record" "this" {
+  count = var.root_domain_name == "" ? 0 : 1
+
+  zone_id = join("", data.aws_route53_zone.this.*.id)
+
+  name = var.hostname == "" ? var.root_domain_name : "${var.hostname}.${var.root_domain_name}"
+  type = "A"
+  ttl  = "300"
+
+  records = [aws_eip.this.public_ip]
+}
+

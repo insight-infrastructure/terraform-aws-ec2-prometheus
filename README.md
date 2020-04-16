@@ -37,13 +37,13 @@ No issue is creating limit on this module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
+| alertmanager\_receivers | list of recievers per docs https://prometheus.io/docs/alerting/configuration/#example | `list(map(string))` | <pre>[<br>  {}<br>]</pre> | no |
 | ebs\_volume\_id | The volume id of the ebs volume to mount | `string` | `""` | no |
 | ebs\_volume\_size | The size of volume - leave as zero or empty for no volume | `number` | `0` | no |
 | eip\_id | The elastic ip id to attach to active instance | `string` | `""` | no |
 | environment | The environment | `string` | `""` | no |
-| grafana\_admin\_password | The grafana admin password | `string` | `"hunter2"` | no |
-| grafana\_admin\_user | The grafana admin user name | `string` | `"admin"` | no |
-| instance\_type | Instance type | `string` | `"t2.micro"` | no |
+| hostname | Boolean to create a hostname - ie hostname.example.com | `string` | `""` | no |
+| instance\_type | Instance type | `string` | `"t2.small"` | no |
 | key\_name | The key pair to import | `string` | `""` | no |
 | monitoring | Boolean for cloudwatch | `bool` | `false` | no |
 | name | The name for the label | `string` | `"prometheus"` | no |
@@ -51,8 +51,10 @@ No issue is creating limit on this module.
 | network\_name | The network name, ie kusama / mainnet | `string` | `"main"` | no |
 | owner | Owner of the infrastructure | `string` | `""` | no |
 | playbook\_vars | Extra playbook vars | `map(string)` | `{}` | no |
+| playbook\_vars\_file | Path to vars file | `string` | `""` | no |
 | private\_key\_path | The path to the private ssh key | `string` | n/a | yes |
 | public\_key\_path | The path to the public ssh key | `string` | n/a | yes |
+| root\_domain\_name | The name of the root domain name | `string` | `""` | no |
 | root\_volume\_size | Root volume size | `string` | `8` | no |
 | stage | The stage of the deployment | `string` | `"blue"` | no |
 | subnet\_id | The id of the subnet | `string` | n/a | yes |

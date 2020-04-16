@@ -55,4 +55,6 @@ module "defaults" {
   ebs_volume_size  = 20
   public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
+
+  playbook_vars_file = "${path.cwd}/../../configs/vars.yaml"
 }

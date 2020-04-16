@@ -1,4 +1,5 @@
 .idea
+.bak
 
 # Terraform and terragrunt
 *.tfstate
