@@ -1,5 +1,3 @@
-resource "random_pet" "this" {}
-
 module "label" {
   source = "github.com/robc-io/terraform-null-label.git?ref=0.16.1"
 
@@ -62,7 +60,7 @@ resource "aws_volume_attachment" "this" {
 data "aws_caller_identity" "this" {}
 
 resource "aws_s3_bucket" "logs" {
-  bucket = "logs-${data.aws_caller_identity.this.account_id}"
+  bucket = "logs-${data.aws_caller_identity.this.account_id}-${random_pet.this.id}"
   acl    = "private"
   tags   = module.label.tags
 }

@@ -1,3 +1,16 @@
+variable "aws_region" {
+  default = "us-east-1"
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+
+variable "public_key_path" {}
+variable "private_key_path" {}
+
+
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   name   = "default"
