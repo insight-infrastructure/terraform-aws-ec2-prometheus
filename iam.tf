@@ -3,7 +3,7 @@ resource "random_pet" "this" {
 }
 
 resource "aws_iam_role" "this" {
-  name               = "${module.label.id}Role${title(random_pet.this.id)}}"
+  name               = "${module.label.id}Role${replace(title(replace(random_pet.this.id, "-", " ")), " ", "")}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -24,12 +24,12 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "this" {
-  name = "${module.label.name}InstanceProfile${title(random_pet.this.id)}"
+  name = "${module.label.name}InstanceProfile${replace(title(replace(random_pet.this.id, "-", " ")), " ", "")}"
   role = aws_iam_role.this.name
 }
 
 resource "aws_iam_policy" "json_policy" {
-  name   = "${module.label.name}Policy${title(random_pet.this.id)}"
+  name   = "${module.label.name}Policy${replace(title(replace(random_pet.this.id, "-", " ")), " ", "")}"
   policy = <<-EOT
 {
     "Version": "2012-10-17",
